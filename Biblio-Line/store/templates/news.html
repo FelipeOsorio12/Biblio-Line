@@ -1,0 +1,94 @@
+{% extends 'base.html' %} {% block content %}
+
+{% load custom_filter %}
+
+{%if subs == 1%}
+<div class="container-fluid mt-3">
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">News Books</h3>
+    </div>
+    <div class="card-body p-0" style="display: block">
+      <table class="table table-striped projects">
+        <thead>
+          <tr>
+            <th style="width: 1%">#</th>
+            <th style="width: 20%">New</th>
+            <th style="width: 30%">Date</th>
+            <th>Information</th>
+            <th style="width: 8%" class="text-center">Status</th>
+            
+            
+          </tr>
+        </thead>
+        <tbody>
+          {% for new in news %}
+          <tr>
+            <td>#</td>
+            <td>
+              <a name = "name"> {{new.name}} </a>
+              
+              
+            </td>
+            <td>
+              <a name = "name"> {{new.date_up}} </a>
+            </td>
+            <td class="project_progress">
+              <a name = "name"> {{new.information}} </a>
+            </td>
+            <td class="project-state">
+              <span class="badge badge-success">New</span>
+            </td>
+            <td class="project-actions text-right">
+              <a class="btn btn-primary btn-sm" href="#">
+                <i class="fas fa-folder"> </i>
+                View
+              </a>
+
+            </td>
+          </tr>
+          {% endfor %}
+          
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{%else%}
+<div class="container-fluid mt-3">
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Welcome to news section </h3>
+    </div>
+    <div class="card-body p-0" style="display: block">
+      <table class="table table-striped projects">
+        <thead>
+          <tr>
+            <th style="text-align: center;">Do you want to find out everything new?</th>
+          </tr>
+          <tr>
+            <td style="text-align: center;">subscribe to the news for more</td>
+          </tr>
+          <tr>
+            <th style="text-align: center;">
+              <form action="/subscribe">
+                <input type="submit" action class="btn float-center btn-outline-success col-lg-6" value="Subscribe">
+              </form>
+              
+            </th>
+          </tr>
+
+          </tr>
+
+        </thead>
+
+      </table>
+    </div>
+  </div>
+</div>
+{%endif%}
+
+
+
+{% endblock %}

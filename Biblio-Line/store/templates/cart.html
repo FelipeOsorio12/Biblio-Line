@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+{% load cart %}
+{% load custom_filter %}
+<div class="container">
+
+   <div class="card text-center p-4 m-4" style="background-color: rgb(126, 125, 125);">
+      <div class="card-header" style="font-size: 20px;">
+        Total <strong>{{products|total_cart_price:request.session.cart|currency}}</strong>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12">
+            <table class="table table-striped table-dark table-hover table-sm">
+              <thead>
+                  <tr>
+                      <th>#</th>
+                      <th>Cubierta</th>
+                      <th>Nombre</th>
+                      <th>Precio</th>
+                      <th>Cantidad</th>
+                      <th>Total</th>
+                      <th>Remover</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  
+                  {% for product in products %}
+                  <tr>
+                      <td>{{forloop.counter}}</td>
+                      <td><img style="height: 80px;" class="figure-img img-fluid rounded" src="{{product.image.url}}" alt=""></td>
+                      <td><strong>{{product.name}}</strong></td>
+                      <td>{{product.price|currency}}</td>
+                      <td>{{product|cart_quantity:request.session.cart}}</td>
+                      <td>{{product|price_total:request.session.cart|currency}}</td>
+                      <td><button type="button" title="Remove book from cart" class="btn btn-sm bg-gradient-danger"><i class="fas fa-window-close"></i></button></td>
+                  </tr>
+  
+                  {% endfor %}
+                 
+              </tbody>
+  
+              <tfoot>
+                  <tr>
+                    <th colspan="4"></th>
+                    <th class="" colspan="">TOTAL</th>
+                    <th>{{products|total_cart_price:request.session.cart|currency}}</th>
+                    <th colspan=""></th>
+                  </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-muted">
+        <div class="m-3 p-3 text-center">
+          <a href="#" data-toggle="modal" data-target="#exampleModal" title="Confirm purchase" class="btn border rounded float-right" style="background-color: black; color: #FFFFFF;">Verificar</a>
+
+        </div>
+      </div>
+  </div>
+
+</div>
+
+
+<!-- modal -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+              Despacho
+          </h5>
+          <hr>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="m-2 p-3">
+            <form action="/check-out" method="POST">
+                {% csrf_token %}
+
+                {%if country == 'CO'%}
+                <div class="col-12">
+                  <div class="mb-3 form-check">
+                    
+                   <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="exampleCheck1"
+                      name = "check"
+                    /> 
+                    <label class="form-check-label d-grid gap-2" for="exampleCheck1"
+                      >
+                      Recoger en la Tienda <i class="fa-sharp fa-light fa-house" style="color: #FFFFFF;"></i>
+                      </label
+                    >
+                  </div>
+
+                  <div id="map"></div>
+
+                  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+                  <script>
+                      var map = L.map('map').setView([ 4.81333, -75.6961], 13);
+              
+                      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+                          maxZoom: 18,
+                      }).addTo(map);
+              
+                      var marker;
+              
+                      map.on('click', function(e) {
+                          if (marker) {
+                              map.removeLayer(marker);
+                          }
+                          marker = L.marker(e.latlng).addTo(map);
+                          // Obtén las coordenadas del lugar seleccionado: e.latlng.lat, e.latlng.lng
+                      });
+                  </script>
+                </div>
+                {%endif%}
+                <div class="form-group">
+                  <label for=""><Name/label>
+                  <input type="text" name="name" id="" class="form-control" readonly aria-describedby="helpId"
+                  value="{{first_name}} {{last_name}}">
+                  
+                </div>
+
+                <div class="form-group">
+                    <label for="">Telefono</label>
+                    <input type="text" name="phone" id=""  readonly class="form-control" placeholder="" aria-describedby="helpId"
+                    value="{{phone}}">
+                </div>
+
+                <div class="form-group">
+                  <label for="">Pais</label>
+                  <input type="text" name="country" id="" readonly class="form-control" placeholder="" aria-describedby="helpId"
+                  value="{{country}}">
+                </div>
+
+                <div class="form-group">
+                  <label for="">Direccion</label>
+                  <input type="text" name="address" id="" class="form-control" placeholder="" aria-describedby="helpId"
+                  value="{{address}}">
+                  
+                </div>
+                
+
+                
+
+
+                  <input type="submit" style="background-color: black; color: #FFFFFF; border-color: #FFFFFF;" class="btn float-right btn-outline-success " value="Verificar">
+            </form>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock %}

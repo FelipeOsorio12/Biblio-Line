@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load cart %}
+{% load custom_filter %}
+<!-- body -->
+<div class="container-fluid mt-3" style="background-color: #afafaf;">
+	<div class="row">
+
+		<!-- filter -->
+		<div class="col-lg-2 col-xl-2 col-md-2 col-sm-12 mx-auto">
+			<div class="list-group">
+
+				<a href="/" class="list-group-item list-group-item-action list-group-item-dark active" style="background-color: #6c757d;"><i class="fas fa-circle"></i> Todas las categorias</a>
+
+				{% for category in categories %}
+				<a href="/?category={{category.id}}"
+					class="list-group-item list-group-item-action list-group-item-secondary active" style="background-color: rgb(169, 169, 169);"><i class="fas fa-circle"></i> {{category.name}}</a>
+				{% endfor %}
+			</div>
+
+			<hr class="my-4 bg-gradient-dark">
+
+			{% if request.session.customer %}
+				<div class="list-group" style="margin-bottom: 5rem;">
+					<a href="/news" class="list-group-item list-group-item-action list-group-item-light active" style="color: white; background-color: #6c757d;"
+					><i class="fas fa-newspaper"></i> Novedades<span class="badge badge-success navbar-badge"><i class="fas fa-search-plus"></i></span></a>
+				</div>
+			{% endif %}
+
+		</div>
+
+		<!-- all products -->
+		<div id='products' class="col-lg-10 col-xl-10 col-md-10 col-sm-12 mx-auto">
+			<div class="row mx-auto">
+				{% for product in products %}
+				<div class="card mx-auto mb-3" id={{product.id}} style="width: 14rem; text-align: left;">
+					<img class="card-img-top img-fluid" src="{{product.image.url}}" alt="Card image cap" style="height: 60%;">
+					<div class="card-body">
+						<ul class="list-unstyled">
+							<li><strong>{{product.name}}</strong></li>
+							<li class="text-muted"><strong>{{product.author}}</strong></li>
+							<li style="color: #000000">{{product.state}}</li>
+							<li style="color: #000000">{{product.price|currency}}</li>
+						  </ul>
+					</div>
+
+					<div class="card-footer p-0 no-gutters">
+						{% if product|is_in_cart:request.session.cart %}
+						<div class="row no-gutters">
+							<form action="/#{{product.id}}" class="col-2 " method="post">
+								{% csrf_token %}
+								<input hidden type="text" name='product' value='{{product.id}}'>
+								<input hidden type="text" name='remove' value='True'>
+								<input type="submit" value=" - " class="btn btn-block btn-success border-right">
+							</form>
+							<div class="text-center col btn btn-success">{{product|cart_quantity:request.session.cart}} in Cart</div>
+							<form action="/#{{product.id}}" class="col-2 " method="post">
+								{% csrf_token %}
+								<input hidden type="text" name='product' value='{{product.id}}'>
+								<input type="submit" value=" + " class="btn btn-block btn-success border-left">
+							</form>
+						</div>
+						{% else %}
+						<form action="/#{{product.id}}" method="POST" class="btn-block">
+							{% csrf_token %}
+							<input hidden type="text" name='product' value='{{product.id}}'>
+							<input type="submit" class="float-right btn form-control" style="background-color: #000000; color: white;"
+								value="añadir al carrito">
+						</form>
+						{% endif %}
+
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+{% endblock %}

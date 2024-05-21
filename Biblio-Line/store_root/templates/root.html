@@ -1,0 +1,78 @@
+{% extends 'base2.html' %}
+
+
+{% block content %}
+
+<div class="container-fluid mt-3">
+    
+    <div class="row">
+        	<!-- filter -->
+
+		<div class="col-lg-3 mx-auto">
+			<div class="list-group" style="margin-bottom: 2rem;">
+
+				<a style="background-color: #0F1C25; color: white;" href="/root_account" class="list-group-item list-group-item-action btn btn-outline-success">Create Admin</a>
+
+                <a href="/root_password" class="list-group-item list-group-item-action btn btn-outline-success ">Password</a>
+
+                <a href="/logout_root" class="list-group-item list-group-item-action btn btn-outline-success ">Logout</a>
+
+
+			</div>
+		</div>
+        
+        <div class="col-lg-7 rounded mx-auto border pt-2">
+            <div class="text-center col">
+            <!--AGREGAR IMAGEN AQUI-->
+            <!-- <hr> -->
+            <hr>
+            </div>
+            <h3 class="alert alert-success rounded-pill" style="text-align:center">Create Admin</h3>
+            <form action="/root_account" method="POST">
+                
+                {% csrf_token %}
+
+                {% if error%}
+                <div class="alert alert-danger" role="alert">
+                    {{error}}
+                </div>
+                {% endif %}
+
+
+
+                <!-- firstname -->
+                <div class="form-group">
+                    <label for="">Admin name</label>
+                    <input type="text" name="username"
+                     id="" value="{{first_name}}" class="form-control form-control-sm" 
+                     placeholder="">
+                </div>
+
+                <!-- email -->
+                <div class="form-group">
+                    <label for="">Email</label>
+                    <input required type="email" name="email" id=""
+                    value="{{email}}" 
+                    class=" form-control-sm form-control" placeholder="">
+                </div>
+
+
+                <!-- Description -->
+                <div class="form-group">
+                    <label for="">DNI</label>
+                    <input type="text"
+                    name="dni"
+                    id=""
+                     class="form-control form-control-sm"
+                     value="{{description}}">
+                </div>
+
+                <hr>
+                <button type="submit" class="btn btn-sm btn-success col-lg-12">Save</button>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

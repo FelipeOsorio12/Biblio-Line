@@ -1,0 +1,214 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container mt-4">
+  <div class="register-box p-3 m-3 rounded mx-auto pt-4">
+    <div class="register-logo">
+      <a href="#"><b>Create</b> an account</a>
+    </div>
+    <div class="card">
+      <div class="card-body register-card-body">
+        <p class="login-box-msg">Register a new membership</p>
+        <form action="/signup" method="POST">
+          {% csrf_token %} {% if error%}
+          <div class="alert alert-danger" role="alert">{{error}}</div>
+          {% endif %}
+          <div class="row">
+            <!-- firstname -->
+            <div class="col-12">
+              <div class="form-group">
+                <label for="" style="font-size: small;">First Name</label>
+                <input
+                  type="text"
+                  name="firstname"
+                  id=""
+                  value="{{values.first_name}}"
+                  class="form-control form-control-sm"
+                  placeholder=""
+                />
+              </div>
+            </div>
+
+            <!-- last name -->
+            <div class="col-12">
+              <div class="form-group">
+                <label for="" style="font-size: small;">Last Name</label>
+                <input
+                  type="text"
+                  name="lastname"
+                  id=""
+                  value="{{values.last_name}}"
+                  class="form-control form-control-sm"
+                />
+              </div>
+            </div>
+
+            <!-- phone -->
+            <div class="col-12">
+              <div class="form-group">
+                <label for="" style="font-size: small;">Phone</label>
+                <input
+                  type="text"
+                  name="phone"
+                  id=""
+                  class="form-control form-control-sm"
+                  value="{{values.phone}}"
+                  placeholder="Enter your phone or mobile number"
+                />
+              </div>
+            </div>
+            <!-- email -->
+            <div class="col-12">
+              <div class="form-group">
+                <label for="" style="font-size: small;">Email</label>
+                <input
+                  required
+                  type="email"
+                  name="email"
+                  id=""
+                  value="{{values.email}}"
+                  class="form-control-sm form-control"
+                  placeholder="abc@gmail.com"
+                />
+              </div>
+            </div>
+
+            <!-- Date -->
+            <div class="col-12">
+              <div class="form-group">
+                <label for="" style="font-size: small;">Date of birth</label>
+                <input
+                  type="date"
+                  name="date"
+                  id=""
+                  class="form-control form-control-sm"
+                  value="{{values.date}}"
+                />
+              </div>
+            </div>
+
+            <!-- country -->
+            <div class="col-12">
+              <div class="form-group">
+                <label for="country" style="font-size: small;">Country</label>
+                <select
+                  name="country"
+                  id="country"
+                  onChange="getCities()"
+                  style="width: 100%; box-sizing: border-box"
+                >
+                  <option value="">Select a country</option>
+                  {% for country_code, country_data in countries.items %}
+                  <option value="{{ country_data.iso }}">
+                    {{ country_data.name }}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <!-- city -->
+            <div class="col-12">
+              <div class="form-group">
+                <label
+                  for="city"
+                  id="city-label"
+                  style="display: none; width: 100%; box-sizing: border-box; font-size: small;"
+                  >City</label
+                >
+                <select name="city" id="city" required style="display: none">
+                  <option value="">Select a city</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- address -->
+            <div class="col-12">
+              <div class="form-group">
+                <label for="address" style="font-size: small;">Address</label>
+                <input
+                  required
+                  type="text"
+                  name="address"
+                  id="address"
+                  class="form-control-sm form-control"
+                  placeholder="Enter your residence address"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <!-- password -->
+            <div class="col-12">
+              <div class="form-group">
+                <label for="" style="font-size: small;">Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  id=""
+                  class="form-control form-control-sm"
+                  placeholder="8 characters, uppercase, numbers and special characters"
+                />
+                
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-group">
+                <label for="" style="font-size: small;">Confirm Password</label>
+                <input
+                  type="password"
+                  name="confirmpassword"
+                  id=""
+                  class="form-control form-control-sm"
+                />
+              </div>
+            </div>
+
+            <!--Checkme button-->
+            <div class="col-12">
+              <div class="mb-3 form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="exampleCheck1"
+                />
+                <label class="form-check-label d-grid gap-2" for="exampleCheck1"
+                  >Check me out</label
+                >
+              </div>
+            </div>
+          </div>
+
+          <hr />
+          <button type="submit" class="btn btn-sm bg-gradient-info col-lg-12">
+            Create a new account!
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function getCities() {
+    // Obtener el valor seleccionado del select de países
+    var country_code = document.getElementById("country").value;
+
+    // Llamar a la función get_cities_by_country() del backend para obtener las ciudades del país seleccionado
+    fetch(`/get_cities_by_country/${country_code}/`)
+      .then((response) => response.text())
+      .then((data) => {
+        // Actualizar el select de ciudades con las ciudades del país seleccionado
+        document.getElementById("city").innerHTML = data;
+
+        // Mostrar el label y select de ciudades
+        document.getElementById("city-label").style.display = "block";
+        document.getElementById("city").style.display = "block";
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+</script>
+
+{% endblock %}

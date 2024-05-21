@@ -1,0 +1,120 @@
+
+
+
+
+
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="container-fluid mt-3" >
+    
+    <div class="row">
+        	<!-- filter -->
+
+          <div class="col-lg-3 mx-auto" style="background-color: #5a5959; padding: 10px;">
+            <div class="list-group d-flex justify-content-center" style="margin-bottom: 2rem;">
+        
+                <a style="background-color: #6c757d; color: rgb(0, 0, 0); border-color: #ffffff; border-radius: 0; padding: 10px;" href="/account" class="list-group-item list-group-item-action btn btn-outline-success mb-2">Cuenta</a>
+        
+                <a style="color: #000000; background-color:rgb(169, 169, 169); border-radius: 0; padding: 10px;" href="/change_password" class="list-group-item list-group-item-action btn btn-outline-success mb-2">Contraseña</a>
+        
+                <a style="background-color: rgb(169, 169, 169); color: rgb(0, 0, 0); padding: 10px;" href="/card" class="list-group-item list-group-item-action btn btn-outline-success mb-2">Tarjetas</a>
+        
+            </div>
+        </div>
+        
+        
+        <div class="col-lg-7 rounded mx-auto border pt-1" style="background-color: #313131;">
+            <div class="text-center col">
+            <!--AGREGAR IMAGEN AQUI-->
+            <!-- <hr> -->
+            <hr>
+            </div>
+                
+                {% csrf_token %}
+
+                {% if error %}
+                    <div class="alert alert-danger" role="alert">
+                        {{error}}
+                    </div>
+                {% endif %}
+
+                {% if good %}
+                    <div class="alert alert-success" role="alert">
+                        {{good}}
+                    </div>
+                {% endif %}
+
+                <div class="container">
+                    <div class="border rounded p-4 m-4" style="background-color: #5a5959;">
+                         <p class="display-4 pl-4 ml-4" style="color: #ffffff;">Tarjetas</p>
+                         <button type="submit"  class="btn btn-sm btn-success col-lg-2" href="#" data-toggle="modal" data-target="#addcard" style="background-color: #000000;border-color: #000000; color: #ffffff;">Añadir Tarjeta</button>
+                         {%if good%}
+                         <small>{{good}}</small>
+                         {%endif%}
+                         <hr>
+                         <table class="table">
+                             <thead>
+                                 <tr>
+                                     <th style="color: white;">#</th>
+                                     <th style="color: white;">Numero Tarjeta</th>
+                                     <th style="color: white;">Titular</th>
+                                     <th style="color: white;">Fecha Expiracion</th>
+
+                                 </tr>
+                             </thead>
+                             <tbody>
+                                 <tr>
+         
+                                 </tr>
+                                 
+                             </tbody>
+                         </table>
+                    </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="addcard" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Añadir Tarjeta</h5>
+          <hr>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="m-2 p-3">
+            <form id="add-form" action="/card" method="POST">
+                {% csrf_token %}
+
+                <div class="form-group">
+                  <label for="">Titular</label>
+                  <input type="text" name="titular" id="add-input" class="form-control" aria-describedby="helpId">
+                </div>
+                <div class="form-group">
+                    <label for="">Numero Tarjeta</label>
+                    <input type="text" name="number" id="add-input" class="form-control" aria-describedby="helpId">
+                  </div>
+                  <div class="form-group">
+                    <label for="">Fecha Expiracion</label>
+                    <input type="text" name="date" id="ad-input" class="form-control" aria-describedby="helpId">
+                  </div>
+                  <input type="submit" class="btn float-right " value="Enviar" style="background-color: black; color: #fff;">
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
